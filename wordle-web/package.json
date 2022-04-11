@@ -9,7 +9,7 @@
   },
   "dependencies": {
     "react": "^18.0.0",
-    "react-datalist-input": "^3.0.2",
+    "react-datalist-input": "^3.0.4",
     "react-dom": "^18.0.0"
   },
   "devDependencies": {
