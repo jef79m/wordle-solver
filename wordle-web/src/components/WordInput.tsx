@@ -26,6 +26,11 @@ function WordInput(props: WordInputProps) {
         }
     }
 
+    const onSelectHandler = (word: string) => {
+        onGoButtonClick(word);
+        setCurrentWord('');
+    }
+
     return (
         <div className="flex justify-center">
             <DatalistInput
@@ -39,7 +44,7 @@ function WordInput(props: WordInputProps) {
                 value={currentWord}
                 setValue={setCurrentWord}
                 placeholder='Enter word or choose a suggestion'
-                onSelect={(item) => setCurrentWord(item.value)}
+                onSelect={(item) => onSelectHandler(item.value)}
                 onChange={handleChange}
                 items={suggestedOptions}
             />

@@ -4,6 +4,7 @@ import WordInput from './components/WordInput'
 import {useEffect, useState} from 'react';
 import {WordRow} from './components/WordRow';
 import {wordList} from './data/wordle_sorted';
+import getSuggestions from "./wordle";
 
 interface Word {
     letters: string[],
@@ -16,12 +17,10 @@ function App() {
     const [badLetters, setBadLetters] = useState<string[]>([]);
     const [notLetters, setNotLetters] = useState<string[][]>([[], [], [], [], []]);
     const [perfectLetters, setPerfectLetters ] = useState<string[]>([]);
+    const [suggestions, setSuggestions ] = useState<string[]>([]);
 
     useEffect(() => {
-        console.log('Bad - Not - Perfect')
-        console.log(badLetters);
-        console.log(notLetters);
-        console.log(perfectLetters);
+        setSuggestions(getSuggestions(badLetters, notLetters, perfectLetters, wordList));
     }, [badLetters, notLetters, perfectLetters])
 
     useEffect(() => {
@@ -42,21 +41,18 @@ function App() {
             setBadLetters(newBadLetters);
             setNotLetters(newNotLetters);
             setPerfectLetters(newPerfectLetters);
-
-            // UPDATE SUGGESTIONS HERE
         }, [words]
     )
-    const handleAddWord = (word: string) => {
+    const handleAddWord = (newWord: string) => {
+        const word = newWord.toLowerCase();
         const newStatus = ['bad', 'bad', 'bad', 'bad', 'bad'];
         word.split("").map((letter, index) => {
-            console.log(notLetters, letter);
             if (perfectLetters[index] === letter) {
                 newStatus[index] = 'perfect'
             } else if (notLetters.join('').includes(letter)) {
                 newStatus[index] = 'not';
             }
         })
-        console.log(newStatus);
         setWords([...words, {word: word, letters: word.split(""), status: newStatus}]);
     }
 
@@ -80,11 +76,11 @@ function App() {
                         <WordRow key={word.word} word={word.word} status={word.status} onChange={handleWordChange(index)}/>
                     )
                 })}
-                <WordInput suggestions={['abort', 'beats', 'atone']} onGoButtonClick={handleAddWord}/>
+                <WordInput suggestions={suggestions} onGoButtonClick={handleAddWord}/>
             </div>
 
             <div className="text-center">
-                <small>Made with 🍺</small>
+                <small>Made with 🍺 by jef79m</small>
             </div>
         </div>
     )
